@@ -26,8 +26,8 @@ app.post('/sendEmail', (req, res) => {
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-          user: 'philip.brekke55@ethereal.email', // generated ethereal user
-          pass: 'ZB7PY1SdseBc63rNCs', // generated ethereal password
+          user: 'myron.schuppe43@ethereal.email', // generated ethereal user
+          pass: 'rYAr7fV1jsH5vB4Xf1', // generated ethereal password
         },
       });
         transporter.sendMail({
