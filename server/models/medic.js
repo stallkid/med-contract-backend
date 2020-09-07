@@ -17,6 +17,10 @@ var MedicSchema = new mongoose.Schema({
         require: true,
         minlength: 6,
     },
+    hashId: {
+        type: String,
+        require: true,
+    },
     status: {
         type: Boolean,
         require: true
@@ -61,7 +65,7 @@ MedicSchema.methods.toJSON = function () {
     var medic = this;
     var medicObject = medic.toObject();
 
-    return _.pick(medicObject, ['_id', 'crm', 'status', 'personal']);
+    return _.pick(medicObject, ['_id', 'crm', 'hashId', 'status', 'personal']);
 };
 
 MedicSchema.methods.generateAuthToken = function () {
@@ -94,20 +98,20 @@ MedicSchema.statics.findByToken = function(token) {
     });
 };
 
-MedicSchema.pre('save', function (next) {
-    var medic = this;
+// MedicSchema.pre('save', function (next) {
+//     var medic = this;
 
-    if (medic.isModified('password')) {
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(medic.password, salt, (err, hash) => {
-                medic.password = hash
-                next();
-            });
-        });
-    } else {
-        return next();
-    }
-});
+    // if (medic.isModified('password')) {
+    //     bcrypt.genSalt(10, (err, salt) => {
+    //         bcrypt.hash(medic.password, salt, (err, hash) => {
+    //             medic.password = hash
+    //             next();
+    //         });
+    //     });
+    // } else {
+    //     return next();
+    // }
+// });
 
 var Medic = mongoose.model('Medic', MedicSchema);
 

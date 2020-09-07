@@ -5,7 +5,7 @@ const _ = require('lodash');
 const express = require('express');
 const moment = require('moment');
 
-const userRouter = require('./routers/user')
+const patientRouter = require('./routers/patient')
 const mailerRouter = require('./routers/mailer')
 const medicRouter = require('./routers/medic')
 
@@ -20,7 +20,7 @@ app.use(function(req, res, next) {
     next();
   });
 
-app.use(userRouter);
+app.use(patientRouter);
 app.use(mailerRouter);
 app.use(medicRouter);
 

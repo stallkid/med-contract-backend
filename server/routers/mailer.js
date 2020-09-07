@@ -1,6 +1,8 @@
 const express = require('express')
 const router = new express.Router()
 const nodeMailer = require('nodemailer');
+const moment = require('moment');
+const _ = require('lodash');
 
 router.post('/sendEmail', (req, res) => {
     const currentDate = moment().format('DD / MM / YYYY');

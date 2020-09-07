@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
-var UserSchema = new mongoose.Schema({
+var PatientSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -85,27 +85,27 @@ var UserSchema = new mongoose.Schema({
     }
 });
 
-UserSchema.methods.toJSON = function () {
-    var user = this;
-    var userObject = user.toObject();
+PatientSchema.methods.toJSON = function () {
+    var patient = this;
+    var patientObject = patient.toObject();
 
-    return _.pick(userObject, ['_id', 'email', 'addresses']);
+    return _.pick(patientObject, ['_id', 'email', 'personal']);
 };
 
-UserSchema.methods.generateAuthToken = function () {
-    var user = this;
+PatientSchema.methods.generateAuthToken = function () {
+    var patient = this;
     var access = 'auth';
-    var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+    var token = jwt.sign({_id: patient._id.toHexString(), access}, 'abc123').toString();
 
-    user.tokens = user.tokens.concat([{access, token}]);
+    patient.tokens = patient.tokens.concat([{access, token}]);
 
-    user.save().then(() => {
+    patient.save().then(() => {
         return token;
     });
 };
 
-UserSchema.statics.findByToken = function(token) {
-    var User = this;
+PatientSchema.statics.findByToken = function(token) {
+    var Patient = this;
     var decoded;
 
     try {
@@ -114,20 +114,20 @@ UserSchema.statics.findByToken = function(token) {
         return Promise.reject();
     }
 
-    return User.findOne({
+    return Patient.findOne({
         _id: decoded._id,
         'tokens.token': token,
         'tokens.access': 'auth'
     });
 };
 
-UserSchema.pre('save', function (next) {
-    var user = this;
+PatientSchema.pre('save', function (next) {
+    var patient = this;
 
-    if (user.isModified('password')) {
+    if (patient.isModified('password')) {
         bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(user.password, salt, (err, hash) => {
-                user.password = hash
+            bcrypt.hash(patient.password, salt, (err, hash) => {
+                patient.password = hash
                 next();
             });
         });
@@ -136,6 +136,6 @@ UserSchema.pre('save', function (next) {
     }
 });
 
-var User = mongoose.model('User', UserSchema);
+var Patient = mongoose.model('Patient', PatientSchema);
 
-module.exports = {User};
+module.exports = {Patient};
