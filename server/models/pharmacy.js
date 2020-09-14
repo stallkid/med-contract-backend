@@ -7,67 +7,86 @@ const bcrypt = require('bcryptjs');
 var PharmacySchema = new mongoose.Schema({
     cnpj: {
         type: String,
+        required: false
+    },
+    name: {
+        type: String,
         required: true,
-        unique: true,
         trim: true,
         minlength: 1
     },
-    password: {
-        type: String,
-        require: true,
-        minlength: 6,
-    },
-    hashId: {
-        type: String,
-        require: true,
-    },
-    personal: {
-        name: {
+    addresses: [{
+        country: {
             type: String,
-            required: true,
-            trim: true,
-            minlength: 1
+            require: false
         },
-        addresses: [{
-            country: {
-                type: String,
-                require: false
-            },
-            state: {
-                type: String,
-                require: false
-            },
-            city: {
-                type: String,
-                require: false
-            },
-            neighborhood: {
-                type: String,
-                require: false
-            },
-            address: {
-                type: String,
-                require: false
-            },
-            number: {
+        state: {
+            type: String,
+            require: false
+        },
+        city: {
+            type: String,
+            require: false
+        },
+        neighborhood: {
+            type: String,
+            require: false
+        },
+        address: {
+            type: String,
+            require: false
+        },
+        number: {
+            type: Number,
+            require: false
+        },
+        cep: {
+            type: String,
+            require: false
+        },
+        geolocation: {
+            latitude: {
                 type: Number,
                 require: false
             },
-            cep: {
+            longitude: {
+                type: Number,
+                require: false
+            }
+        }
+    }],
+    users: [{
+        email: {
+            type: String,
+            required: false,
+            trim: true,
+            minlength: 1,
+            unique: true,
+            validate: {
+                validator: validator.isEmail,
+                message: '{VALUE} is not a valid email'
+            }
+        },
+        password: {
+            type: String,
+            require: false,
+            minlength: 6,
+        },
+        role: {
+            type: String,
+            require: false,
+            enum: ['medic', 'pharmacy', 'admin', 'patient']
+        },
+        tokens: [{
+            access: {
+                type: String,
+                require: false
+            },
+            token: {
                 type: String,
                 require: false
             }
-        }]
-    },
-    tokens: [{
-        access: {
-            type: String,
-            require: true
-        },
-        token: {
-            type: String,
-            require: true
-        }
+        }],
     }]
 });
 
