@@ -10,6 +10,8 @@ const mailerRouter = require('./routers/mailer')
 const medicRouter = require('./routers/medic')
 const pharmacyRouter = require('./routers/pharmacy')
 const paypalRouter = require('./routers/paypal')
+const orderRouter = require('./routers/order')
+const RemedyRouter = require('./routers/remedy');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -27,6 +29,8 @@ app.use(mailerRouter);
 app.use(medicRouter);
 app.use(pharmacyRouter);
 app.use(paypalRouter);
+app.use(orderRouter);
+app.use(RemedyRouter);
 
 app.listen(port, () => {
     console.log(`Server Up and Running at port ${port}`);

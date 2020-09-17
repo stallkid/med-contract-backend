@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+
+  mongodb:
+    image: 'mongo'
+    container_name: mongodb
+    network_mode: bridge
+    ports:
+      - '27015:27017'
+    volumes:
+      - ./data/db:/data/db
+  backend:
+    container_name: medcontract-backend
+    network_mode: bridge
+    build: "."
+    expose:
+      - 8090
+    ports:
+      - 8090:3000
+    environment:
+      NODE_ENV: test
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    volumes:
+      - ./:/node
+      - ./node_modules:/node/node_modules

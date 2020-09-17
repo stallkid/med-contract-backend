@@ -1,9 +1,6 @@
 const express = require('express')
 const request = require('request')
-const { Pharmacy } = require('./../models/pharmacy')
 const router = new express.Router()
-const bcrypt = require('bcryptjs');
-const _ = require('lodash');
 
 var CLIENT =
   'AZs1j7_o5MTLv9wiCqvcxNL3uhatpv8FO_lONpexrh070IPUM7z1n4KUtzcBoz2foTbX7vL0wkJpBIMI';

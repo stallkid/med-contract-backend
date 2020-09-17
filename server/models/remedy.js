@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const _ = require('lodash');
 const bcrypt = require('bcryptjs');
 
-var MedicineSchema = new mongoose.Schema({
+var RemedySchema = new mongoose.Schema({
     code: {
         type: String,
         required: true,
@@ -24,16 +24,19 @@ var MedicineSchema = new mongoose.Schema({
     description: {
         type: String,
         require: true
-    }
+    }, value: {
+        type: Number,
+        require: true
+    },
 });
 
-MedicineSchema.methods.toJSON = function () {
-    var medicine = this;
-    var medicineObject = medicine.toObject();
+RemedySchema.methods.toJSON = function () {
+    var remedy = this;
+    var remedyObject = remedy.toObject();
 
-    return _.pick(medicineObject, ['_id', 'code', 'name', 'dosage', 'description']);
+    return _.pick(remedyObject, ['_id', 'code', 'name', 'dosage', 'description', 'value']);
 };
 
-var Medicine = mongoose.model('Medicine', MedicineSchema);
+var Remedy = mongoose.model('Remedy', RemedySchema);
 
-module.exports = {Medicine};
+module.exports = {Remedy};

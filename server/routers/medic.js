@@ -16,6 +16,33 @@ router.post('/medics', async (req, res) => {
     }
 })
 
+router.post('/medics/login', async (req, res) => {
+    try {
+        const crm = req.body.crm;
+        const password = req.body.password;
+
+        const medic = await Medic.findOne({crm: crm, password: password});
+        if (medic) {
+            res.send({
+                "data": {
+                    "id": medic._id,
+                    "role": "medic",
+                    "crm": medic.crm
+                },
+                "userStatus": true 
+            });
+        } else {
+            res.status(404).send({
+                "error": "Wrong credentials",
+                "userStatus": false
+            })
+        }
+        
+    } catch (e) {
+        
+    }
+})
+
 router.get('/medics', async (req, res) => {
     try {
         const medics = await Medic.find({})

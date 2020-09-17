@@ -52,7 +52,7 @@ var PatientSchema = new mongoose.Schema({
                 require: false,
             }
         }],
-        addresses: [{
+        address: {
             country: {
                 type: String,
                 require: false
@@ -81,7 +81,7 @@ var PatientSchema = new mongoose.Schema({
                 type: String,
                 require: false
             }
-        }],
+        },
     }
 });
 
@@ -121,20 +121,20 @@ PatientSchema.statics.findByToken = function(token) {
     });
 };
 
-PatientSchema.pre('save', function (next) {
-    var patient = this;
+// PatientSchema.pre('save', function (next) {
+//     var patient = this;
 
-    if (patient.isModified('password')) {
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(patient.password, salt, (err, hash) => {
-                patient.password = hash
-                next();
-            });
-        });
-    } else {
-        return next();
-    }
-});
+//     if (patient.isModified('password')) {
+//         bcrypt.genSalt(10, (err, salt) => {
+//             bcrypt.hash(patient.password, salt, (err, hash) => {
+//                 patient.password = hash
+//                 next();
+//             });
+//         });
+//     } else {
+//         return next();
+//     }
+// });
 
 var Patient = mongoose.model('Patient', PatientSchema);
 

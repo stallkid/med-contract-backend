@@ -15,12 +15,40 @@ router.post('/patients', async (req, res) => {
     }
 })
 
+router.post('/patients/login', async (req, res) => {
+    try {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        const patient = await Patient.findOne({email: username, password: password});
+        if (patient) {
+            res.send({
+                "data": {
+                    "id": patient._id,
+                    "username": patient.email,
+                    "doc": patient.personal.document[0].value,
+                    "role": patient.role
+                },
+                "userStatus": true 
+            });
+        } else {
+            res.status(404).send({
+                "error": "Wrong credentials",
+                "userStatus": false
+            })
+        }
+    } catch (e) {
+        res.status(500).send(e)
+    }
+
+})
+
 router.get('/patients', async (req, res) => {
     try {
         const patients = await Patient.find({})
         res.send(patients)
     } catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 })
 
@@ -36,13 +64,13 @@ router.get('/patients/:id', async (req, res) => {
 
         res.send(patient)
     } catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 })
 
 router.patch('/patients/:id', async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['email', 'password', 'addresses']
+    const allowedUpdates = ['email', 'password', 'address']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
@@ -72,7 +100,7 @@ router.delete('/patients/:id', async (req, res) => {
 
         res.send(patient)
     } catch (e) {
-        res.status(500).send()
+        res.status(500).send(e)
     }
 })
 
@@ -85,6 +113,22 @@ router.post('/patients', async (req, res) => {
         res.status(201).send(patient)
     } catch (e) {
         res.status(400).send(e)
+    }
+})
+
+router.get('/patients/doc/:doc', async (req, res) => {
+    try {
+        const doc = req.params.doc;
+
+        const patient = await Patient.find({"personal.document.value": doc})
+
+        if (!patient) {
+            return res.status(404).send()
+        }
+    
+        res.send(patient);
+    } catch (e) {
+        res.status(500).send(e)
     }
 })
 

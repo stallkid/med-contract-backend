@@ -94,7 +94,7 @@ PharmacySchema.methods.toJSON = function () {
     var pharmacy = this;
     var pharmacyObject = pharmacy.toObject();
 
-    return _.pick(pharmacyObject, ['_id', 'crm', 'hashId', 'status', 'personal']);
+    return _.pick(pharmacyObject, ['_id', 'cnpj', 'name', 'addresses']);
 };
 
 PharmacySchema.methods.generateAuthToken = function () {
