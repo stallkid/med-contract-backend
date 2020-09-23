@@ -41,6 +41,22 @@ router.get('/pharmacies/:id', async (req, res) => {
     }
 })
 
+router.get('/pharmacies/cnpj/:cnpj', async (req, res) => {
+    const cnpj = req.params.cnpj
+
+    try {
+        const pharmacy = await Pharmacy.findOne({cnpj: cnpj})
+
+        if (!pharmacy) {
+            return res.status(404).send()
+        }
+
+        res.send(pharmacy)
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
 router.patch('/pharmacies/:id', async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['email', 'password', 'addresses']
@@ -82,13 +98,29 @@ router.get('/pharmacies/me',(req, res) => {
 });
 
 router.post('/pharmacies/login', async (req, res) => {
-    const crm = req.body.crm;
-    const password = req.body.password;
-
     try {
-        const pharmacy = await Pharmacy.find({crm: crm, password: password});
-        if (pharmacy.length > 0) {
-            res.status(200).send(true)
+        const cnpj = req.body.cnpj;
+        const username = req.body.username;
+        const password = req.body.password;
+
+        const pharmacy = await Pharmacy.findOne({
+            "cnpj": cnpj,
+            "users.email": username,
+            "users.password": password
+        });
+        if (pharmacy) {
+            const user = pharmacy.users.filter( user => {
+                return user.email === username;
+            });
+            res.status(200).send({
+                "data": {
+                    "id": user[0]._id,
+                    "username": user[0].email,
+                    "pharmacyId": pharmacy._id,
+                    "role": user[0].role
+                },
+                "userStatus": true
+            })
         } else {
             res.status(404).send(false)
         }

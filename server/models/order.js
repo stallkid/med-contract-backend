@@ -7,7 +7,10 @@ const bcrypt = require('bcryptjs');
 var OrderSchema = new mongoose.Schema({
     hashId: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        trim: true,
+        minlength: 1
     },
     patientId: {
         type: String,
