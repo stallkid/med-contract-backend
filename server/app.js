@@ -12,6 +12,7 @@ const pharmacyRouter = require('./routers/pharmacy')
 const paypalRouter = require('./routers/paypal')
 const orderRouter = require('./routers/order')
 const RemedyRouter = require('./routers/remedy');
+const AdminRouter = require('./routers/admin');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ app.use(pharmacyRouter);
 app.use(paypalRouter);
 app.use(orderRouter);
 app.use(RemedyRouter);
+app.use(AdminRouter);
 
 app.listen(port, () => {
     console.log(`Server Up and Running at port ${port}`);

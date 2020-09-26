@@ -25,6 +25,11 @@ var MedicSchema = new mongoose.Schema({
         type: Boolean,
         require: true
     },
+    role: {
+        type: String,
+        require: false,
+        enum: ['medic', 'pharmacy', 'admin', 'patient']
+    },
     personal: {
         name: {
             type: String,
@@ -52,11 +57,11 @@ var MedicSchema = new mongoose.Schema({
     tokens: [{
         access: {
             type: String,
-            require: true
+            require: false
         },
         token: {
             type: String,
-            require: true
+            require: false
         }
     }]
 });

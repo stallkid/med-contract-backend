@@ -1,8 +1,6 @@
 const express = require('express')
 const { Pharmacy } = require('./../models/pharmacy')
 const router = new express.Router()
-const bcrypt = require('bcryptjs');
-const _ = require('lodash');
 
 router.post('/pharmacies', async (req, res) => {
     const pharmacy = new Pharmacy(req.body)

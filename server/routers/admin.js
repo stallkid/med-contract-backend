@@ -1,31 +1,31 @@
 const express = require('express')
-const { Medic } = require('./../models/medic')
+const { Admin } = require('./../models/admin')
 const router = new express.Router()
 
-router.post('/medics', async (req, res) => {
-    const medic = new Medic(req.body)
-    medic.role = "medic";
+router.post('/admins', async (req, res) => {
+    const admin = new Admin(req.body)
+    admin.role = "admin";
 
     try {
-        await medic.save()
-        res.status(201).send(medic)
+        await admin.save()
+        res.status(201).send(admin)
     } catch (e) {
         res.status(400).send(e)
     }
 })
 
-router.post('/medics/login', async (req, res) => {
+router.post('/admins/login', async (req, res) => {
     try {
-        const crm = req.body.crm;
+        const email = req.body.email;
         const password = req.body.password;
 
-        const medic = await Medic.findOne({crm: crm, password: password});
-        if (medic) {
+        const admin = await Admin.findOne({email: email, password: password});
+        if (admin) {
             res.send({
                 "data": {
-                    "id": medic._id,
-                    "role": "medic",
-                    "crm": medic.crm
+                    "id": admin._id,
+                    "role": "admin",
+                    "email": admin.email
                 },
                 "userStatus": true 
             });
@@ -41,32 +41,32 @@ router.post('/medics/login', async (req, res) => {
     }
 })
 
-router.get('/medics', async (req, res) => {
+router.get('/admins', async (req, res) => {
     try {
-        const medics = await Medic.find({})
-        res.send(medics)
+        const admins = await Admin.find({})
+        res.send(admins)
     } catch (e) {
         res.status(500).send()
     }
 })
 
-router.get('/medics/:id', async (req, res) => {
+router.get('/admins/:id', async (req, res) => {
     const _id = req.params.id
 
     try {
-        const medic = await Medic.findById(_id)
+        const admin = await Admin.findById(_id)
 
-        if (!medic) {
+        if (!admin) {
             return res.status(404).send()
         }
 
-        res.send(medic)
+        res.send(admin)
     } catch (e) {
         res.status(500).send()
     }
 })
 
-router.patch('/medics/:id', async (req, res) => {
+router.patch('/admins/:id', async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['email', 'password', 'addresses']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -76,43 +76,43 @@ router.patch('/medics/:id', async (req, res) => {
     }
 
     try {
-        const medic = await Medic.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+        const admin = await Admin.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
 
-        if (!medic) {
+        if (!admin) {
             return res.status(404).send()
         }
 
-        res.send(medic)
+        res.send(admin)
     } catch (e) {
         res.status(400).send(e)
     }
 })
 
-router.delete('/medics/:id', async (req, res) => {
+router.delete('/admins/:id', async (req, res) => {
     try {
-        const medic = await Medic.findByIdAndDelete(req.params.id)
+        const admin = await Admin.findByIdAndDelete(req.params.id)
 
-        if (!medic) {
+        if (!admin) {
             return res.status(404).send()
         }
 
-        res.send(medic)
+        res.send(admin)
     } catch (e) {
         res.status(500).send()
     }
 })
 
-router.get('/medics/me',(req, res) => {
-    res.send(req.medic);
+router.get('/admins/me',(req, res) => {
+    res.send(req.admin);
 });
 
-router.post('/medics/login', async (req, res) => {
-    const crm = req.body.crm;
+router.post('/admins/login', async (req, res) => {
+    const email = req.body.email;
     const password = req.body.password;
 
     try {
-        const medic = await Medic.find({crm: crm, password: password});
-        if (medic.length > 0) {
+        const admin = await Admin.find({email: email, password: password});
+        if (admin.length > 0) {
             res.status(200).send(true)
         } else {
             res.status(404).send(false)

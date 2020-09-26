@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 router.post('/sendEmail', (req, res) => {
     const currentDate = moment().format('DD / MM / YYYY');
-    const body = _.pick(req.body, ['hashId', 'randomPass']);
+    const body = _.pick(req.body, ['hashId', 'randomPass', 'desc']);
 
     let transporter = nodeMailer.createTransport({
         host: "smtp.ethereal.email",
@@ -21,11 +21,14 @@ router.post('/sendEmail', (req, res) => {
             from: '"Med-Contract" <med-contract@tcc.com>', // sender address
             to: "paciente@email.com", // list of receivers
             subject: `Receita Médica - ${currentDate}`, // Subject line
-            text: `Este é o código para retirar a receita ${body.hashId}`, // plain text body
-            html: `Este é o código para retirar a receita <b>${body.hashId}</b><br>Esta é a senha para retirar a receita <b>${body.randomPass}</b>`, // html body
+            html: `Este é o código para retirar a receita <b>${body.hashId}</b>
+              <br>
+              Esta é a senha para retirar a receita <b>${body.randomPass}</b>
+              <br><br>
+              Descrição do tratamento: ${body.desc}`, // html body
         }, (error, info) => {
             if (error) {
-                res.json(error);
+              res.json(error);
             }
             res.json(info);
         });
