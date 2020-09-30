@@ -25,6 +25,10 @@ var OrderSchema = new mongoose.Schema({
         required: true
     },
     orderDetails: {
+        selectedStore: {
+            type: String,
+            required: false
+        },
         value: {
             type: Number,
             required: false

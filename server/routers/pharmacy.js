@@ -55,6 +55,26 @@ router.get('/pharmacies/cnpj/:cnpj', async (req, res) => {
     }
 })
 
+router.get('/pharmacies/store/:storeId', async (req, res) => {
+    const storeId = req.params.storeId
+
+    try {
+        const pharmacy = await Pharmacy.findOne({"addresses._id": storeId})
+        const store = await pharmacy.addresses.filter( address => {
+            return String(address._id) === storeId;
+        })
+
+        if (!pharmacy) {
+            return res.status(404).send()
+        }
+
+        res.send(store)
+
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
 router.patch('/pharmacies/:id', async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['email', 'password', 'addresses']

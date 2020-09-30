@@ -53,6 +53,21 @@ router.get('/orders/checkOrder/:hashId', async (req, res) => {
     }
 })
 
+router.get('/orders/prescription/:hashId', async (req, res) => {
+    try {
+        const hashId = req.params.hashId
+        const order = await Order.findOne({hashId: hashId})
+
+        if (!order) {
+            return res.send(false)
+        }
+
+        res.send(order)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
+
 router.get('/orders/pharmacy/:pharId', async (req, res) => {
     try {
         const pharId = req.params.pharId;
